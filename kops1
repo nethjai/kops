@@ -1,0 +1,79 @@
+export KOPS_STATE_STORE=s3://statestore.devpoc.poc.essent.nl
+
+kops delete cluster --name devpoc.poc.essent.nl --yes
+
+aws ec2 delete-vpc --vpc-id ${vpcid}
+
+#!/usr/bin/env bash -eu
+
+export NAME=devpoc.poc.essent.nl && export KOPS_STATE_STORE=s3://statestore.devpoc.poc.essent.nl
+  
+  
+   kops export kubecfg devpoc.poc.essent.nl
+   
+   
+   
+   root@ip-172-17-1-191:/home/ubuntu/abc/k8s-cluster-poc# . bin/aliases
+Found docker binary, will use docker.artifactory.essent.nl/docker/systems/kops:1.17.1
+Aliases loaded.
+root@ip-172-17-1-191:/home/ubuntu/abc/k8s-cluster-poc# bin/kops-apply.sh devpoc
+Found docker binary, will use docker.artifactory.essent.nl/docker/systems/kops:1.17.1
+Aliases loaded.
+Operating for cluster: devpoc.poc.essent.nl
+Cluster does not exist yet.
+Creating cluster: devpoc.poc.essent.nl
+
+Created cluster/devpoc.poc.essent.nl
+Created instancegroup/master-eu-central-1a
+Created instancegroup/nodes
+
+To deploy these resources, run: kops update cluster devpoc.poc.essent.nl --yes
+
+
+error reading user provided cert ".ssh/devpoc/ca.crt": open .ssh/devpoc/ca.crt: no such file or directory
+root@ip-172-17-1-191:/home/ubuntu/abc/k8s-cluster-poc# ls
+EXCEPTIONS.md  README.md  aws-policies  bin  build  chart  tools  values
+root@ip-172-17-1-191:/home/ubuntu/abc/k8s-cluster-poc# cd bin/
+root@ip-172-17-1-191:/home/ubuntu/abc/k8s-cluster-poc/bin# ls
+aliases  delete-vpc.sh  kops-apply.sh  kops-delete.sh  merge-policies.sh
+root@ip-172-17-1-191:/home/ubuntu/abc/k8s-cluster-poc/bin# vi kops-apply.sh
+root@ip-172-17-1-191:/home/ubuntu/abc/k8s-cluster-poc/bin# export KOPS_STATE_STORE=s3://statestore.devpoc.poc.essent.nl
+root@ip-172-17-1-191:/home/ubuntu/abc/k8s-cluster-poc/bin# kops update cluster devpoc.poc.essent.nl --yes
+W0920 07:31:18.732964   16798 external_access.go:43] SSHAccess is empty
+I0920 07:31:18.925547   16798 executor.go:103] Tasks: 0 done / 95 total; 42 can run
+I0920 07:31:19.811521   16798 vfs_castore.go:590] Issuing new certificate: "apiserver-aggregator-ca"
+I0920 07:31:20.017558   16798 vfs_castore.go:590] Issuing new certificate: "etcd-peers-ca-main"
+I0920 07:31:20.605769   16798 vfs_castore.go:590] Issuing new certificate: "etcd-manager-ca-main"
+I0920 07:31:20.643220   16798 vfs_castore.go:590] Issuing new certificate: "ca"
+I0920 07:31:20.834578   16798 vfs_castore.go:590] Issuing new certificate: "etcd-manager-ca-events"
+I0920 07:31:20.893787   16798 vfs_castore.go:590] Issuing new certificate: "etcd-peers-ca-events"
+I0920 07:31:21.046851   16798 vfs_castore.go:590] Issuing new certificate: "etcd-clients-ca"
+I0920 07:31:21.249408   16798 executor.go:103] Tasks: 42 done / 95 total; 29 can run
+I0920 07:31:23.595466   16798 vfs_castore.go:590] Issuing new certificate: "kubecfg"
+I0920 07:31:23.676377   16798 vfs_castore.go:590] Issuing new certificate: "kops"
+I0920 07:31:23.822842   16798 vfs_castore.go:590] Issuing new certificate: "kubelet-api"
+I0920 07:31:23.881347   16798 vfs_castore.go:590] Issuing new certificate: "kubelet"
+I0920 07:31:24.003272   16798 vfs_castore.go:590] Issuing new certificate: "apiserver-proxy-client"
+I0920 07:31:24.055111   16798 vfs_castore.go:590] Issuing new certificate: "kube-proxy"
+I0920 07:31:24.143736   16798 vfs_castore.go:590] Issuing new certificate: "kube-controller-manager"
+I0920 07:31:24.279760   16798 vfs_castore.go:590] Issuing new certificate: "kube-scheduler"
+I0920 07:31:24.960714   16798 vfs_castore.go:590] Issuing new certificate: "master"
+I0920 07:31:24.968520   16798 vfs_castore.go:590] Issuing new certificate: "apiserver-aggregator"
+I0920 07:31:25.224946   16798 executor.go:103] Tasks: 71 done / 95 total; 20 can run
+I0920 07:31:25.429341   16798 launchconfiguration.go:375] waiting for IAM instance profile "nodes.devpoc.poc.essent.nl" to be ready
+I0920 07:31:25.433960   16798 launchconfiguration.go:375] waiting for IAM instance profile "masters.devpoc.poc.essent.nl" to be ready
+I0920 07:31:35.782064   16798 executor.go:103] Tasks: 91 done / 95 total; 3 can run
+I0920 07:31:36.818352   16798 executor.go:103] Tasks: 94 done / 95 total; 1 can run
+I0920 07:31:37.056156   16798 executor.go:103] Tasks: 95 done / 95 total; 0 can run
+I0920 07:31:37.056367   16798 dns.go:156] Pre-creating DNS records
+I0920 07:31:38.038540   16798 update_cluster.go:308] Exporting kubecfg for cluster
+kops has set your kubectl context to devpoc.poc.essent.nl
+
+Cluster is starting.  It should be ready in a few minutes.
+
+Suggestions:
+ * validate cluster: kops validate cluster --wait 10m
+ * list nodes: kubectl get nodes --show-labels
+ * ssh to the master: ssh -i ~/.ssh/id_rsa ubuntu@api.devpoc.poc.essent.nl
+ * the ubuntu user is specific to Ubuntu. If not using Ubuntu please use the appropriate user based on your OS.
+ * read about installing addons at: https://kops.sigs.k8s.io/operations/addons.
